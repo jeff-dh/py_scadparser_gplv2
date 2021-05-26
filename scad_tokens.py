@@ -18,12 +18,12 @@ reserved = {
                 'else'   : 'ELSE',
                 'let'    : 'LET',
                 'assert' : 'ASSERT',
-                'echo'   : 'ECHO',
                 'for'    : 'FOR',
                 'each'   : 'EACH',
                 'true'   : 'TRUE',
                 'false'  : 'FALSE',
-                'undef'  : 'UNDEF',
+                'echo'   : 'ECHO',
+                'undef'   : 'UNDEF',
 }
 
 tokens = [
@@ -58,18 +58,14 @@ t_OR = "\|\|"
 
 t_FILENAME = r'<[a-zA-Z_0-9/\\\.-]*>'
 
-def t_eat_escaped_quotes(t):
-    r"\\\""
-    pass
-
 def t_comments1(t):
     r'(/\*(.|\n)*?\*/)'
     t.lexer.lineno += t.value.count("\n")
     pass
 
 def t_comments2(t):
-    r'//.*[\n\']?'
-    t.lexer.lineno += 1
+    r'//.*[\n]?'
+    t.lexer.lineno += t.value.count("\n")
     pass
 
 def t_whitespace(t):
@@ -82,7 +78,7 @@ def t_ID(t):
     return t
 
 def t_NUMBER(t):
-    r'\d*\.?\d+'
+    r'[0-9]*\.?\d+([eE][-\+]\d+)?'
     t.value = float(t.value)
     return t
 
